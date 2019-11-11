@@ -3,6 +3,7 @@ package Modelo;
 import Controlador.Conexion;
 import Controlador.Errores;
 import Controlador.SentenciaLibros;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -54,6 +55,23 @@ public class GestionLibros {
     {
         String consulta = "update libros set fecha = '" + fecha + "' where codigo = " + codLibro;
         sentencia.sentenciaFecha(consulta);
+    }
+    
+    public int calcularCodLibro() throws Errores
+    {
+        String consulta = "select * from libros";
+        int cont = sentencia.calcularCod(consulta) * 10 + 20;
+        
+        return cont;
+    }
+    
+    public void sentenciaNuevoLibro(int codLib, int depcodigo, String titulo, String precio, Date fecha) throws Errores
+    {
+        
+        float pre = Float.parseFloat(precio);
+        
+        String consulta = "insert into libros values (?, ?, ?, ?, ?)";
+        sentencia.añadirLibro(consulta, codLib, depcodigo, titulo, pre, fecha);
     }
     
 }

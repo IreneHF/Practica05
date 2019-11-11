@@ -3,9 +3,15 @@ package Vista;
 import Controlador.Errores;
 import Modelo.GestionLibros;
 import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 
 public class VisualizarLibros extends javax.swing.JPanel {
 
@@ -29,6 +35,7 @@ public class VisualizarLibros extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -105,6 +112,11 @@ public class VisualizarLibros extends javax.swing.JPanel {
         });
 
         jButton6.setText("↑ Cambiar ↑");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -232,6 +244,43 @@ public class VisualizarLibros extends javax.swing.JPanel {
         (new VisualizarVentas(principal, true, codLibro)).setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    //BOTON CAMBIAR IMAGEN
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        int valor = jFileChooser1.showOpenDialog(this);
+        
+        if(valor == JFileChooser.APPROVE_OPTION) { 
+            String url = jFileChooser1.getSelectedFile().getAbsolutePath();
+            cambiarImagen(url);
+            File fotoNueva = new File(url);
+            
+            String nuevaURL = "imagenes/" + codLibro + ".jpg";
+            File foto = new File(nuevaURL);
+        
+            if(! foto.exists())
+                foto.delete();
+            
+            
+            copiarImagen(url, nuevaURL);
+        }
+            
+            
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    public void copiarImagen(String fotoExistente, String fotoNueva)
+    {
+        try{
+            FileInputStream fis = new FileInputStream(fotoExistente); //Archivo a copiar
+            FileOutputStream fos = new FileOutputStream(fotoNueva); //Copia del archivo
+            FileChannel inChannel = fis.getChannel();
+            FileChannel outChannel = fos.getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+            fis.close();
+            fos.close();
+        }catch (IOException ioe) {
+            System.err.println("Error al Generar Copia");
+        }
+    }
+    
     public void mostrarDatos()
     {
         try {
@@ -272,6 +321,14 @@ public class VisualizarLibros extends javax.swing.JPanel {
         }
     }
     
+    public void cambiarImagen(String url)
+    {
+        ImageIcon imagen = new ImageIcon(url);
+        imagen = adaptar(imagen);
+        
+        jLabel8.setIcon(imagen);
+    }
+    
     public ImageIcon adaptar(ImageIcon imagen)
     {
         Image i = imagen.getImage();
@@ -288,6 +345,7 @@ public class VisualizarLibros extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

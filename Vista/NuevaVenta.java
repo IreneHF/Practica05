@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 public class NuevaVenta extends javax.swing.JDialog {
 
@@ -137,7 +138,10 @@ public class NuevaVenta extends javax.swing.JDialog {
         if(validarNif(nif))
             jLabel3.setText("El nif es válido");
         else
+        {
             jLabel3.setText("El nif no es válido");
+            new Errores(4).lanzarError();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static boolean validarNif(String nif){
@@ -146,16 +150,19 @@ public class NuevaVenta extends javax.swing.JDialog {
             return false;
         }
 
+        //Secuencia de letras que el nif puede tener ordenada
         String secuenciaLetrasNIF = "TRWAGMYFPDXBNJZSQVHLCKE"; 
         nif = nif.toUpperCase();
 
-        //Posición inicial: 0 (primero en la cadena de texto).
-        //Longitud: cadena de texto menos última posición. Así obtenemos solo el número.
+        //Obtener solo el numero
         String numeroNIF = nif.substring(0, nif.length()-1);
 
-        //Obtenemos la letra con un char que nos servirá también para el índice de las secuenciaLetrasNIF
+        //Obtener la letra
         char letraNIF = nif.charAt(8);
+        
+        //El resto de el numero entre 23 da la letra correcta para que sea un nif valido
         int i = Integer.parseInt(numeroNIF) % 23;
+        
         return letraNIF == secuenciaLetrasNIF.charAt(i);
     }
     
@@ -174,6 +181,8 @@ public class NuevaVenta extends javax.swing.JDialog {
         String codigo = parts[2];
         try {
             control.sentenciaNuevaVenta(codLibro, codigo);
+            JOptionPane.showMessageDialog(null, "Fecha cambiada correctamente.", "", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
         } catch (Errores ex) {
             ex.lanzarError();
         }

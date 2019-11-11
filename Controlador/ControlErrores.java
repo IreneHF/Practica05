@@ -69,6 +69,11 @@ public class ControlErrores{
                 error = error +  "Fecha superior a la actual.";
                 break;
             }
+            case 4: 
+            {
+                error = error +  "NIF no válido.";
+                break;
+            }
         }
                 
         

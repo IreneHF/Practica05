@@ -154,7 +154,6 @@ public class SentenciaVentas {
                 sentencia.setString(3, cod);
                 sentencia.executeUpdate();
             } catch (SQLException e) {
-                System.out.println(e.toString());
                 throw new Errores(1);
             }
     }
